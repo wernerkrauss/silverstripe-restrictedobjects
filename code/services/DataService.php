@@ -117,23 +117,25 @@ class DataService {
 		if(!DB::isActive()) {
 			throw new Exception("DataObjects have been requested before the database is ready. Please ensure your database connection details are correct, your database has been built, and that you are not trying to query the database in _config.php.");
 		}
-
+		/**
+		 * @var $list DataList
+		 */
 		$list = DataList::create($type); 
 		if ($filter) {
 			if (is_array($filter)) {
 				$list = $list->filter($filter);
 			} else {
-				$list->where($filter);
+				$list = $list->where($filter);
 			}
 		}
 		if ($sort) {
-			$list->sort($sort);
+			$list = $list->sort($sort);
 		}
 		if ($limit) {
 			if (is_string($limit)) {
 				$limit = explode(',', $limit);
 			}
-			$list->limit($limit[1], $limit[0]);
+			$list = $list->limit($limit[1], $limit[0]);
 		}
 		if ($join) {
 			if (isset($join['table'])) {
@@ -142,7 +144,7 @@ class DataService {
 			foreach ($join as $joinVal) {
 				$list->innerJoin($joinVal['table'], $joinVal['clause']);
 				if (isset($joinVal['where'])) {
-					$list->where($joinVal['where']);
+					$list = $list->where($joinVal['where']);
 				}
 			}
 		}
@@ -158,7 +160,8 @@ class DataService {
 			$lastCount = $count;
 			$newOffset = $limit[0];
 			$nextOffset = $newOffset + $limit[1];
-			while ($count < $targetNumber) {
+//			while ($count < $targetNumber) { //really? when only one item it returns a list with one item repeated...
+			while ($count > $targetNumber) {
 				$nextOffset = $newOffset = $newOffset + $limit[1];
 				$list->limit($limit[1], $newOffset);
 				foreach ($list as $item) {
