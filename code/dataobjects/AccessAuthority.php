@@ -70,10 +70,11 @@ class AccessAuthority extends DataObject {
 		} else {
 			$allRoles = array();
 		}
-		$roles = new DropdownField('Role', _t('AccessAuthority.ROLE', 'Role'), $allRoles, '', null, '(Role)');
-
+		$roles = new DropdownField('Role', _t('AccessAuthority.ROLE', 'Role'), $allRoles, '', null);
+		$roles->setEmptyString('(Role)');
 		// deliberately only allow singles here - people should define roles!
-		$perms = new DropdownField('Perms', _t('PermissionTable.PERMS', 'Permission - use roles for multiple!'), AccessRole::allPermissions(), '', null, '(Permission)');
+		$perms = new DropdownField('Perms', _t('PermissionTable.PERMS', 'Permission - use roles for multiple!'), AccessRole::allPermissions(), '', null);
+		$perms->setEmptyString('(Permission)');
 
 		$detailFormFields = new FieldList(
 			$roles,

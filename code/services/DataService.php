@@ -200,7 +200,9 @@ class DataService {
 	protected function filterList($list, $perm) {
 		$ret = $list->filterByCallback(function ($item) use ($perm) {
 			if ($item->hasExtension('Restrictable')) {
-				return $item->checkPerm($perm);
+				//return $item->checkPerm($perm);
+				$func = 'can'.$perm;
+				return $item->$func();
 			}
 			return $item->canView();
 		});
