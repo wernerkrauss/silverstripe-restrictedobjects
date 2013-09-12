@@ -149,7 +149,8 @@ class DataService {
 			}
 		}
 
-		$ret = $this->filterList($list, $requiredPerm);
+		//$ret = $this->filterList($list, $requiredPerm);
+		$ret = $list; //disable perm checking @todo: remove hack
 
 		// properly recalculate the offset that we had to use by recursively calling loadObjects
 		// with the next page of info until we have enough, then return the actual offset used in the
@@ -199,11 +200,11 @@ class DataService {
 	 */
 	protected function filterList($list, $perm) {
 		$ret = $list->filterByCallback(function ($item) use ($perm) {
-			if ($item->hasExtension('Restrictable')) {
-				//return $item->checkPerm($perm);
-				$func = 'can'.$perm;
-				return $item->$func();
-			}
+//			if ($item->hasExtension('Restrictable')) {
+//				//return $item->checkPerm($perm);
+//				$func = 'can'.$perm;
+//				return $item->$func();
+//			}
 			return $item->canView();
 		});
 		return $ret;
